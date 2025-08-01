@@ -6,9 +6,12 @@ This is the backend service for the Uber Video application. It provides RESTful 
 
 - [Getting Started](#getting-started)
 - [API Endpoints](#api-endpoints)
-  - [/user/register](#userregister)
+  - [/users/register](#usersregister)
     - [Request Body](#request-body)
     - [Responses](#responses)
+  - [/users/login](#userslogin)
+    - [Request Body](#login-request-body)
+    - [Responses](#login-responses)
 - [Project Structure](#project-structure)
 - [License](#license)
 
@@ -43,11 +46,11 @@ This is the backend service for the Uber Video application. It provides RESTful 
 
 ## API Endpoints
 
-### `/user/register`
+### `/users/register`
 
 Registers a new user.
 
-- **URL:** `/user/register`
+- **URL:** `/users/register`
 - **Method:** `POST`
 - **Content-Type:** `application/json`
 
@@ -114,6 +117,80 @@ Registers a new user.
 
 ---
 
+### `/users/login`
+
+Authenticates a user and returns a JWT token.
+
+- **URL:** `/users/login`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+
+#### Login Request Body
+
+```json
+{
+  "email": "john@example.com",
+  "password": "yourpassword"
+}
+```
+
+- `email` (string, required, must be valid email)
+- `password` (string, required, min 6 chars)
+
+#### Login Responses
+
+- **201 Created**
+  - Login successful.
+  - Returns a JWT token and user info.
+  ```json
+  {
+    "token": "jwt_token_here",
+    "user": {
+      "_id": "user_id",
+      "fullname": {
+        "firstName": "John",
+        "lastName": "Doe"
+      },
+      "email": "john@example.com"
+    }
+  }
+  ```
+
+- **400 Bad Request**
+  - Validation failed.
+  - Example:
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Invalid email address",
+        "param": "email",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+- **401 Unauthorized**
+  - Invalid email or password.
+  - Example:
+  ```json
+  {
+    "message": "Invalid email or password"
+  }
+  ```
+
+- **500 Internal Server Error**
+  - Server error.
+  - Example:
+  ```json
+  {
+    "message": "Server error"
+  }
+  ```
+
+---
+
 ## Project Structure
 
 ```
@@ -130,3 +207,4 @@ Backend/
 ├── server.js
 ├── package.json
 └── .env
+```
