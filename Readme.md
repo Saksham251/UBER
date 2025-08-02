@@ -12,6 +12,10 @@ This is the backend service for the Uber Video application. It provides RESTful 
   - [/users/login](#userslogin)
     - [Request Body](#login-request-body)
     - [Responses](#login-responses)
+  - [/users/profile](#usersprofile)
+    - [Responses](#profile-responses)
+  - [/users/logout](#userslogout)
+    - [Responses](#logout-responses)
 - [Project Structure](#project-structure)
 - [License](#license)
 
@@ -177,6 +181,80 @@ Authenticates a user and returns a JWT token.
   ```json
   {
     "message": "Invalid email or password"
+  }
+  ```
+
+- **500 Internal Server Error**
+  - Server error.
+  - Example:
+  ```json
+  {
+    "message": "Server error"
+  }
+  ```
+
+---
+
+### `/users/profile`
+
+Returns the authenticated user's profile information.
+
+- **URL:** `/users/profile`
+- **Method:** `POST`
+- **Headers:**  
+  - `Authorization: Bearer <JWT_TOKEN>` (or cookie named `token`)
+
+#### Profile Responses
+
+- **200 OK**
+  - Returns the user profile.
+  ```json
+  {
+    "_id": "user_id",
+    "fullname": {
+      "firstName": "John",
+      "lastName": "Doe"
+    },
+    "email": "john@example.com"
+  }
+  ```
+
+- **401 Unauthorized**
+  - Missing or invalid token.
+  - Example:
+  ```json
+  {
+    "message": "Unauthorized"
+  }
+  ```
+
+---
+
+### `/users/logout`
+
+Logs out the authenticated user by blacklisting the JWT token.
+
+- **URL:** `/users/logout`
+- **Method:** `POST`
+- **Headers:**  
+  - `Authorization: Bearer <JWT_TOKEN>` (or cookie named `token`)
+
+#### Logout Responses
+
+- **200 OK**
+  - Logout successful.
+  ```json
+  {
+    "message": "Logged out"
+  }
+  ```
+
+- **401 Unauthorized**
+  - Missing or invalid token.
+  - Example:
+  ```json
+  {
+    "message": "Unauthorized"
   }
   ```
 
