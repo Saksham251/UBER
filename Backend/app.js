@@ -7,8 +7,11 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 app.use(express.json());
 const cors = require("cors");
-app.use(cors());
-
+app.use(cors({
+  origin: 'http://localhost:5173', // frontend URL
+  credentials: true,               // Allow cookies / Authorization headers
+  allowedHeaders: ['Content-Type', 'Authorization'], // Explicitly allow Authorization header
+}));
 const connectDB = require("./db/db");
 connectDB();
 
