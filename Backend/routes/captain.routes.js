@@ -18,7 +18,7 @@ router.post("/register",[
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters long"),
     body("vehicle.color")
-      .isLength({min: 3}).withMessage("Color must be at least 6 characters"),
+      .isLength({min: 3}).withMessage("Color must be at least 3 characters"),
     body("vehicle.plate")
       .isLength({min:3}).withMessage("Plate must be 3 characters long"),
     body("vehicle.capacity")
