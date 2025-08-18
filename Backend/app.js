@@ -6,6 +6,7 @@ dotenv.config();
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 app.use(express.json());
+
 const cors = require("cors");
 app.use(cors({
   origin: 'http://localhost:5173', // frontend URL
@@ -17,6 +18,7 @@ connectDB();
 
 const  userRoutes = require("./routes/user.routes");
 const captainRoutes = require("./routes/captain.routes");
+const mapsRoutes = require("./routes/maps.routes");
 
 app.get("/",(req,res)=>{
   res.send("Hello World");
@@ -31,5 +33,6 @@ app.use((req, res, next) => {
 app.use("/users",userRoutes);
 
 app.use("/captain",captainRoutes);
+app.use("/maps",mapsRoutes);
 
 module.exports = app;

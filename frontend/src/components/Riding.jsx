@@ -3,7 +3,7 @@ import React from 'react'
 const Riding = () => {
     return (
         <div className='h-screen'>
-            <Link to="/home" className="fixed right-2 top-2 flex justify-center items-center rounded-full bg-white ">
+            <Link to="/home" className="h-10 w-10 fixed right-2 top-2 flex justify-center items-center rounded-full bg-white ">
             <i className="text-lg ri-home-7-line"></i>
             </Link>
             <div className='h-1/2'>
@@ -36,14 +36,13 @@ const Riding = () => {
                         <div className='flex items-center gap-5 p-3 mb-5'>
                             <i className="ri-currency-line"></i>
                             <div>
-                                <h3 className='text-lg font-medium'>193.20</h3>
+                                <h3 className='text-lg font-medium'>₹ 193.20</h3>
                                 <p className='text-sm -mt-1 text-gray-600'>Cash Cash</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <button className='bg-green-600 w-full text-white font-semibold p-2 rounded-lg'>Make a Payment</button>
-
             </div>
         </div>
     )
