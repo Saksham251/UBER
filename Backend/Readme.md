@@ -50,8 +50,22 @@ This is the backend service for the Uber Video application. It provides RESTful 
     PORT=3000
     MONGODB_URI=your_mongodb_connection_string
     JWT_SECRET=your_jwt_secret
+    GOOGLE_MAPS_API=your_google_maps_api_key
     ```
-4. Start the server:
+
+4. Enable Google Maps APIs in Google Cloud Console:
+    1. Go to [Google Cloud Console](https://console.cloud.google.com/).
+    2. Create/select a project.
+    3. Navigate to **APIs & Services > Library**.
+    4. Search and enable the following APIs:
+        - **Maps JavaScript API**
+        - **Geocoding API**
+        - **Distance Matrix API**
+        - **Places API**
+    5. Go to **APIs & Services > Credentials** and create an API key.
+    6. Copy the API key and add it to your `.env` file as `GOOGLE_MAPS_API`.
+
+5. Start the server:
     ```
     node server.js
     ```
@@ -336,6 +350,114 @@ Logs out the authenticated captain by blacklisting the JWT token.
 
 ---
 
+### `/maps/get-coordinates`
+
+Returns latitude and longitude for a given address using Google Maps Geocoding API.
+
+- **URL:** `/maps/get-coordinates`
+- **Method:** `GET`
+- **Headers:**  
+  - `Authorization: Bearer <JWT_TOKEN>` (or cookie named `token`)
+- **Query Parameters:**
+  - `address` (string, required, min 3 chars)
+
+#### Responses
+- **200 OK**
+  ```json
+  {
+    "lat": 28.6139,
+    "lng": 77.2090
+  }
+  ```
+- **400 Bad Request**  
+  Validation failed.
+- **404 Not Found**  
+  Coordinates not found.
+
+---
+
+### `/maps/get-distance-time`
+
+Returns distance and duration between origin and destination using Google Maps Distance Matrix API.
+
+- **URL:** `/maps/get-distance-time`
+- **Method:** `GET`
+- **Headers:**  
+  - `Authorization: Bearer <JWT_TOKEN>` (or cookie named `token`)
+- **Query Parameters:**
+  - `origin` (string, required, min 3 chars)
+  - `destination` (string, required, min 3 chars)
+
+#### Responses
+- **200 OK**
+  ```json
+  {
+    "distance": { "text": "10 km", "value": 10000 },
+    "duration": { "text": "20 mins", "value": 1200 }
+  }
+  ```
+- **400 Bad Request**  
+  Validation failed.
+- **404 Not Found**  
+  No route found.
+
+---
+
+### `/maps/get-suggestions`
+
+Returns location autocomplete suggestions using Google Maps Places API.
+
+- **URL:** `/maps/get-suggestions`
+- **Method:** `GET`
+- **Query Parameters:**
+  - `input` (string, required, min 3 chars)
+
+#### Responses
+- **200 OK**
+  ```json
+  [
+    {
+      "description": "New Delhi, India",
+      "place_id": "ChIJLbZ-NFv9DDkRzk0gTkm3wlI"
+    },
+    ...
+  ]
+  ```
+- **400 Bad Request**  
+  Validation failed.
+- **404 Not Found**  
+  No suggestions found.
+
+---
+## 🗺️ Google Maps API Setup
+
+To enable Google Maps services for this project, follow these steps:
+
+1. **Go to Google Cloud Console**  
+   👉 [Google Cloud Console](https://console.cloud.google.com/)
+
+2. **Create / Select a Project**  
+   - If you don’t have a project yet, create a new one.  
+   - Otherwise, select your existing project.
+
+3. **Enable Required APIs**  
+   Navigate to **APIs & Services > Library** and enable the following APIs:
+   - ✅ Maps JavaScript API  
+   - ✅ Geocoding API  
+   - ✅ Distance Matrix API  
+   - ✅ Places API  
+
+4. **Generate API Key**  
+   - Go to **APIs & Services > Credentials**  
+   - Click **Create Credentials → API Key**  
+   - Copy the generated key.
+
+5. **Add API Key to Environment Variables**  
+   In your `.env` file, add:  
+   ```env
+   GOOGLE_MAPS_API=your_api_key_here
+
+
 ## Project Structure
 
 ```
@@ -343,6 +465,7 @@ Backend/
 ├── controllers/
 │   ├── user.controller.js
 │   └── captain.controller.js
+│   └── map.controller.js
 ├── models/
 │   ├── user.model.js
 │   ├── captain.model.js
@@ -350,8 +473,10 @@ Backend/
 ├── routes/
 │   ├── user.routes.js
 │   └── captain.routes.js
+│   └── maps.routes.js
 ├── services/
 │   ├── user.service.js
 │   └── captain.service.js
+│   └── maps.service.js
 ├── app.js
 ├── server.js
