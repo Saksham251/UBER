@@ -87,10 +87,10 @@ Registers a new user.
 ```json
 {
   "fullname": {
-    "firstName": "John",
-    "lastName": "Doe"
+    "firstName": "Priya",
+    "lastName": "Sharma"
   },
-  "email": "john@example.com",
+  "email": "priya.sharma@example.com",
   "password": "yourpassword"
 }
 ```
@@ -118,7 +118,7 @@ Authenticates a user and returns a JWT token.
 
 ```json
 {
-  "email": "john@example.com",
+  "email": "priya.sharma@example.com",
   "password": "yourpassword"
 }
 ```
@@ -187,14 +187,14 @@ Registers a new captain.
 ```json
 {
   "fullname": {
-    "firstName": "Amit",
-    "lastName": "Sharma"
+    "firstName": "Rohan",
+    "lastName": "Verma"
   },
-  "email": "amit@example.com",
+  "email": "rohan.verma@example.com",
   "password": "yourpassword",
   "vehicle": {
-    "color": "Red",
-    "plate": "AB1234",
+    "color": "Blue",
+    "plate": "DL5CAB1234",
     "capacity": 4,
     "vehicleType": "car"
   }
@@ -220,13 +220,13 @@ Registers a new captain.
     "captain": {
       "_id": "captain_id",
       "fullname": {
-        "firstName": "Amit",
-        "lastName": "Sharma"
+        "firstName": "Rohan",
+        "lastName": "Verma"
       },
-      "email": "amit@example.com",
+      "email": "rohan.verma@example.com",
       "vehicle": {
-        "color": "Red",
-        "plate": "AB1234",
+        "color": "Blue",
+        "plate": "DL5CAB1234",
         "capacity": 4,
         "vehicleType": "car"
       }
@@ -252,7 +252,7 @@ Authenticates a captain and returns a JWT token.
 
 ```json
 {
-  "email": "amit@example.com",
+  "email": "rohan.verma@example.com",
   "password": "yourpassword"
 }
 ```
@@ -267,13 +267,13 @@ Authenticates a captain and returns a JWT token.
     "captain": {
       "_id": "captain_id",
       "fullname": {
-        "firstName": "Amit",
-        "lastName": "Sharma"
+        "firstName": "Rohan",
+        "lastName": "Verma"
       },
-      "email": "amit@example.com",
+      "email": "rohan.verma@example.com",
       "vehicle": {
-        "color": "Red",
-        "plate": "AB1234",
+        "color": "Blue",
+        "plate": "DL5CAB1234",
         "capacity": 4,
         "vehicleType": "car"
       }
@@ -307,13 +307,13 @@ Returns the authenticated captain's profile information.
     "captain": {
       "_id": "captain_id",
       "fullname": {
-        "firstName": "Amit",
-        "lastName": "Sharma"
+        "firstName": "Rohan",
+        "lastName": "Verma"
       },
-      "email": "amit@example.com",
+      "email": "rohan.verma@example.com",
       "vehicle": {
-        "color": "Red",
-        "plate": "AB1234",
+        "color": "Blue",
+        "plate": "DL5CAB1234",
         "capacity": 4,
         "vehicleType": "car"
       }
@@ -429,6 +429,54 @@ Returns location autocomplete suggestions using Google Maps Places API.
   No suggestions found.
 
 ---
+
+### `/rides/create`
+
+Creates a new ride request.
+
+- **URL:** `/rides/create`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+- **Headers:**  
+  - `Authorization: Bearer <JWT_TOKEN>` (or cookie named `token`)
+
+#### Request Body
+
+```json
+{
+  "pickup": "Connaught Place, New Delhi",
+  "destination": "Cyber Hub, Gurgaon",
+  "vehicleType": "car"
+}
+```
+
+- `pickup` (string, required, min 3 chars)
+- `destination` (string, required, min 3 chars)
+- `vehicleType` (string, required, one of: `auto`, `car`, `moto`)
+
+#### Responses
+
+- **200 OK**  
+  Returns the created ride object.
+  ```json
+  {
+    "ride": {
+        "_id": "60d21b4667d0d8992e610c85",
+        "user": "60d21b4667d0d8992e610c84",
+        "pickup": "Connaught Place, New Delhi",
+        "destination": "Cyber Hub, Gurgaon",
+        "fare": 450.50,
+        "status": "pending"
+    }
+  }
+  ```
+- **400 Bad Request**  
+  Validation failed.
+- **500 Internal Server Error**  
+  Server error.
+
+---
+
 ## 🗺️ Google Maps API Setup
 
 To enable Google Maps services for this project, follow these steps:
@@ -456,7 +504,7 @@ To enable Google Maps services for this project, follow these steps:
    In your `.env` file, add:  
    ```env
    GOOGLE_MAPS_API=your_api_key_here
-
+   
 
 ## Project Structure
 
@@ -464,19 +512,30 @@ To enable Google Maps services for this project, follow these steps:
 Backend/
 ├── controllers/
 │   ├── user.controller.js
-│   └── captain.controller.js
-│   └── map.controller.js
+│   ├── captain.controller.js
+│   ├── map.controller.js
+│   └── ride.controller.js
+├── db/
+│   └── db.js
+├── middlewares/
+│   └── auth.middleware.js
 ├── models/
 │   ├── user.model.js
 │   ├── captain.model.js
-│   └── blackListToken.model.js
+│   ├── blackListToken.model.js
+│   └── ride.model.js
 ├── routes/
 │   ├── user.routes.js
-│   └── captain.routes.js
-│   └── maps.routes.js
+│   ├── captain.routes.js
+│   ├── maps.routes.js
+│   └── ride.routes.js
 ├── services/
 │   ├── user.service.js
-│   └── captain.service.js
-│   └── maps.service.js
+│   ├── captain.service.js
+│   ├── maps.service.js
+│   └── ride.service.js
 ├── app.js
+├── package.json
 ├── server.js
+└── Readme.md
+```
