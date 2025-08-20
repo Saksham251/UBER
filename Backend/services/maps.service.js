@@ -74,7 +74,11 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
     throw new Error("Some input is required to get suggestions");
   }
   const apiKey = process.env.GOOGLE_MAPS_API;
-  const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&types=geocode&components=country:IN&key=${apiKey}`;
+  const cleanedInput = input
+    .trim()
+    .replace(/,/g, " ")     // comma ko space me convert karo
+    .replace(/\s+/g, " ");  // multiple spaces ko ek space me
+  const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(cleanedInput)}&types=geocode&components=country:IN&key=${apiKey}`;
 
   try {
     const response = await axios.get(url);

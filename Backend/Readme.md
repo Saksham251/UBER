@@ -477,6 +477,51 @@ Creates a new ride request.
 
 ---
 
+### `/rides/get-fare`
+
+Returns estimated fare for available vehicle types between pickup and destination using Google Distance Matrix.
+
+- **URL:** `/rides/get-fare`
+- **Method:** `GET`
+- **Headers:**  
+  - `Authorization: Bearer <JWT_TOKEN>` (or cookie named `token`)
+- **Query Parameters:**
+  - `pickup` (string, required, min 3 chars) — e.g. "Connaught Place, New Delhi"
+  - `destination` (string, required, min 3 chars) — e.g. "Cyber Hub, Gurgaon"
+
+#### Example Request
+```
+GET /rides/get-fare?pickup=Connaught%20Place,%20New%20Delhi&destination=Cyber%20Hub,%20Gurgaon
+Authorization: Bearer <JWT_TOKEN>
+```
+
+#### Responses
+
+- **200 OK**  
+  Returns fare estimates (INR) for each vehicle type:
+  ```json
+  {
+    "fare": {
+      "auto": 120.5,
+      "car": 260.75,
+      "moto": 95.0
+    }
+  }
+  ```
+  - (Example numbers for Connaught Place → Cyber Hub)
+
+- **400 Bad Request**  
+  Validation failed (missing/invalid pickup or destination).
+
+- **500 Internal Server Error**  
+  Server error or distance calculation failure.
+
+- Notes:
+  - Fare is calculated using configured base fare, per-km and per-minute rates and Google Distance Matrix results (distance in meters, duration in seconds).
+  - Ensure `GOOGLE_MAPS_API` is set in `.env` and required Google Maps APIs are enabled.
+
+---
+
 ## 🗺️ Google Maps API Setup
 
 To enable Google Maps services for this project, follow these steps:
