@@ -42,12 +42,15 @@ module.exports.authUser = async (req,res,next)=>{
 
 // Captain AuthMiddleware
 module.exports.authCaptain = async (req,res,next)=>{
-    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+    console.log("req.headers.authorization:", req.headers.authorization);
+    console.log("req.cookies.token:", req.cookies?.captainToken);
+    
+    const token = req.cookies.captainToken || req.headers.authorization?.split(' ')[1];
     if(!token){
         return res.status(401).json({message:"Unauthorized"});
     }
 
-    const isBlackListed = await blackListTokenModel.findOne({token:token});
+    const isBlackListed = await blackListTokenModel.findOne({captainToken:token});
     if(isBlackListed){
         return res.status(401).json({message:"Unauthorized"});
     }

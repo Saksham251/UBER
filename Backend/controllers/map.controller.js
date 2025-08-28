@@ -46,10 +46,9 @@ module.exports.getAutoCompleteSuggestions = async (req, res, next) => {
         errors: errors.array(),
       });
     }
-    const {input} = req.query;
+    const { input } = req.query;
     const suggestions = await mapService.getAutoCompleteSuggestions(input);
     res.status(200).json(suggestions);
-    
   } catch (error) {
     console.error(error);
     return res.status(404).json({

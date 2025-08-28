@@ -4,7 +4,7 @@ import { CaptainDataContext } from '../context/CaptainContext';
 import axios from 'axios';
 
 const CaptainProtectedWrapper = ({ children }) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("captainToken");
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { captain, setCaptain } = useContext(CaptainDataContext);
@@ -24,13 +24,13 @@ const CaptainProtectedWrapper = ({ children }) => {
     )
     .then((response) => {
       if (response.status === 200) {
-        setCaptain(response.data.captain);
+        setCaptain(response.data);
         setIsLoading(false);
       }
     })
     .catch(err => {
       console.error("Profile fetch error:", err.response?.data || err.message);
-      localStorage.removeItem("token");
+      localStorage.removeItem("captainToken");
       navigate("/captain-login");
     });
   }, [token, navigate, setCaptain]);

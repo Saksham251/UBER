@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import "remixicon/fonts/remixicon.css"
-
 const RidePopup = (props) => {
     return (
         <div>
@@ -12,7 +11,7 @@ const RidePopup = (props) => {
             <div className='flex items-center justify-between mt-4 p-3 bg-yellow-400 rounded-lg'>
                 <div className='flex items-center gap-3 justify-center'>
                     <img className='h-10 w-10 rounded-full object-cover' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN2V9i8xsBdYJRpANAiQw3cmO1EL8OF_Edyg&s" alt="" />
-                    <h2 className='text-lg font-medium'>Harsh Patel</h2>
+                    <h2 className='text-lg font-medium'>{props.ride?.user.fullname.firstName+" "+props.ride?.user.fullname.lastName}</h2>
                 </div>
                 <h5 className='text-lg font-semibold'>2.2 KM</h5>
             </div>
@@ -22,20 +21,20 @@ const RidePopup = (props) => {
                         <i className="ri-map-pin-range-fill"></i>
                         <div>
                             <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm -mt-1 text-gray-600'>Kanariya Talab, Bhopal</p>
+                            <p className='text-sm -mt-1 text-gray-600'>{props.ride?.pickup}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-5 p-3 border-b-2 border-gray-200'>
                         <i className="ri-map-pin-fill"></i>
                         <div>
                             <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm -mt-1 text-gray-600'>Kanariya Talab, Bhopal</p>
+                            <p className='text-sm -mt-1 text-gray-600'>{props.ride?.destination}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-5 p-3 mb-5'>
                         <i className="ri-currency-line"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>193.20</h3>
+                            <h3 className='text-lg font-medium'>{props.ride?.fare}</h3>
                             <p className='text-sm -mt-1 text-gray-600'>Cash Cash</p>
                         </div>
                     </div>
@@ -44,6 +43,7 @@ const RidePopup = (props) => {
                 <div className='flex w-full mt-5 items-center justify-between'>
                     <button onClick={() => {
                         props.setConfirmRidePopupPanel(true);
+                        props.confirmRide()
                     }}
                         className='bg-green-600 text-white font-semibold p-4 px-8 rounded-lg'
                     >Accept

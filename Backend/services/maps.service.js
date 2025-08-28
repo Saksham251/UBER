@@ -1,4 +1,5 @@
 const axios = require("axios");
+const captainModel = require("../models/captain.model");
 
 module.exports.getAddressCoordinate = async (address) => {
   const apiKey = process.env.GOOGLE_MAPS_API;
@@ -50,12 +51,6 @@ module.exports.getDistanceTime = async (origin, destination) => {
       }
       const element = response.data.rows[0].elements[0];
       if (element.status === "OK") {
-        // return {
-        //   distance: element.distance.text, // km
-        //   duration: element.duration.text, // mins
-        //   distanceValue: element.distance.value, // meters
-        //   durationValue: element.duration.value, // seconds
-        // };
         return element;
       } else {
         throw new Error("No route found between origin and destination");
@@ -76,9 +71,11 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
   const apiKey = process.env.GOOGLE_MAPS_API;
   const cleanedInput = input
     .trim()
-    .replace(/,/g, " ")     // comma ko space me convert karo
-    .replace(/\s+/g, " ");  // multiple spaces ko ek space me
-  const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(cleanedInput)}&types=geocode&components=country:IN&key=${apiKey}`;
+    .replace(/,/g, " ") // comma ko space me convert karo
+    .replace(/\s+/g, " "); // multiple spaces ko ek space me
+  const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
+    cleanedInput
+  )}&types=geocode&components=country:IN&key=${apiKey}`;
 
   try {
     const response = await axios.get(url);
@@ -88,4 +85,19 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
     console.error("Suggestions/AutoComplete API Error:", error.message);
     throw error;
   }
+};
+module.exports.getCaptainsInTheRadius = async (lng, lat, radiusInKm) => {
+  const radiusInMeters = radiusInKm * 1000; // convert km to meters
+  console.log("Searching near:", lng, lat);
+
+  const captains = await captainModel.find({
+    location: {
+      $near: {
+        $geometry: { type: "Point", coordinates: [lng, lat] },
+        $maxDistance: radiusInMeters
+      }
+    },
+  });
+  console.log("Captains: ",captains);
+  return captains;
 };

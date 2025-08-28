@@ -1,10 +1,14 @@
 import React, { useRef, useState } from 'react'
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "remixicon/fonts/remixicon.css"
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import FinishRide from '../components/FinishRide';
+import LiveTracking from '../components/LiveTracking';
+
 const CaptainRiding = () => {
+  const location = useLocation();
+  const rideData = location.state?.ride;
 
   const [finishRidePanel,setFinishRidePanel] = useState(false);
   const finishRidePanelRef= useRef(null);
@@ -31,11 +35,7 @@ const CaptainRiding = () => {
         </Link>
       </div>
       <div className='h-4/5'>
-        <img
-          className="h-full w-full object-cover"
-          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-          alt="Map"
-        />
+        <LiveTracking/>
       </div>
 
       <div className='h-1/5 p-6 bg-yellow-400 flex items-center justify-between relative pt-10'
@@ -51,7 +51,10 @@ const CaptainRiding = () => {
       </div>
 
       <div ref={finishRidePanelRef} className='fixed z-10 bottom-0 px-3 py-6 w-full translate-y-full bg-white pt-12'>
-        <FinishRide setFinishRidePanel={setFinishRidePanel}/>
+        <FinishRide 
+          rideData={rideData}
+          setFinishRidePanel={setFinishRidePanel}
+        />
       </div>
     </div>
   )

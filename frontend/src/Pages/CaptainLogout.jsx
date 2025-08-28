@@ -6,7 +6,7 @@ const CaptainLogout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('captainToken');
 
     axios.post(`${import.meta.env.VITE_BASE_URL}/captain/logout`, {}, {
       headers: {
@@ -16,13 +16,13 @@ const CaptainLogout = () => {
     })
     .then((response) => {
       if (response.status === 200) {
-        localStorage.removeItem('token');
+        localStorage.removeItem('captainToken');
         navigate("/captain-login");
       }
     })
     .catch((err) => {
       console.error("Logout failed:", err);
-      localStorage.removeItem('token');
+      localStorage.removeItem('captainToken');
       navigate("/captain-login");
     });
 
